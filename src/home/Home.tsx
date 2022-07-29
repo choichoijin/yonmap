@@ -19,7 +19,7 @@ function Home() {
         setPositionX(res.data.pos_x);
         setPositionY(res.data.pos_y);
       })
-      .catch((err) => console.log(err));
+      .catch(() => setStartBuilding("연세대학교 " + startSubject));
   };
 
   const getBuildingNameEnd = () => {
@@ -30,7 +30,7 @@ function Home() {
         setPositionX(res.data.pos_x);
         setPositionY(res.data.pos_y);
       })
-      .catch((err) => console.log(err));
+      .catch(() => setEndBuilding("연세대학교 " + endSubject));
   };
 
   const onChangeStart = (e: any) => {
