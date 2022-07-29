@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
-// interface MapProps {
-//   latitude: number;
-//   longitude: number;
-// }
+interface MapProps {
+  positionX: number;
+  positionY: number;
+}
 
-const Map = () => {
+const Map = (props: MapProps) => {
+  const { positionX, positionY } = props;
   const { kakao } = window;
 
   function scriptTemplate(id: number) {
@@ -61,8 +62,9 @@ const Map = () => {
 
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(37.563, 126.9383), //지도의 중심좌표.
+      center: new kakao.maps.LatLng(positionX, positionY), //지도의 중심좌표.
       level: 3, //지도의 레벨(확대, 축소 정도)
+      isPanto: true,
     };
 
     const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
@@ -114,7 +116,7 @@ const Map = () => {
     kakao.maps.event.addListener(marker2, "click", function () {
       infowindow2.open(map, marker2);
     });
-  }, []);
+  }, [positionX, positionY]);
 
   return <MapContainer id="map" />;
 };

@@ -3,13 +3,11 @@ import styled from "styled-components";
 import Map from "./Map";
 import axios from "axios";
 
-// axios.defaults.withCredentials = true;
-
 function Home() {
   const [startSubject, setStartSubject] = useState("");
   const [endSubject, setEndSubject] = useState("");
-  // const [positionX, setPositionX] = useState();
-  // const [positionY, setPositionY] = useState();
+  const [positionX, setPositionX] = useState(37.563);
+  const [positionY, setPositionY] = useState(126.9383);
   const [startBuilding, setStartBuilding] = useState("");
   const [endBuilding, setEndBuilding] = useState("");
 
@@ -18,8 +16,8 @@ function Home() {
       .get(`http://172.30.1.7:8080/items/subject?subject=${startSubject}`)
       .then((res) => {
         setStartBuilding(res.data.building);
-        // setPositionX(res.data.pos_x);
-        // setPositionY(res.data.pos_y);
+        setPositionX(res.data.pos_x);
+        setPositionY(res.data.pos_y);
       })
       .catch((err) => console.log(err));
   };
@@ -29,8 +27,8 @@ function Home() {
       .get(`http://172.30.1.7:8080/items/subject?subject=${endSubject}`)
       .then((res) => {
         setEndBuilding(res.data.building);
-        // setPositionX(res.data.pos_x);
-        // setPositionY(res.data.pos_y);
+        setPositionX(res.data.pos_x);
+        setPositionY(res.data.pos_y);
       })
       .catch((err) => console.log(err));
   };
@@ -38,12 +36,10 @@ function Home() {
   const onChangeStart = (e: any) => {
     const { value } = e.target;
     setStartSubject(value);
-    getBuildingNameStart();
   };
   const onChangeEnd = (e: any) => {
     const { value } = e.target;
     setEndSubject(value);
-    getBuildingNameEnd();
   };
   const onKeyPressStart = () => {
     //서버한테 요청해서 좌표 받음.
@@ -86,7 +82,7 @@ function Home() {
           <button onClick={onClick}>길찾기</button>
         </StSearchButton>
       </SideBar>
-      <Map />
+      <Map positionX={positionX} positionY={positionY} />
     </HomeArea>
   );
 }
