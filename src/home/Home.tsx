@@ -1,18 +1,89 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Map from "./Map";
+import axios from "axios";
+
+// axios.defaults.withCredentials = true;
 
 function Home() {
+  const [startSubject, setStartSubject] = useState("");
+  const [endSubject, setEndSubject] = useState("");
+  // const [positionX, setPositionX] = useState();
+  // const [positionY, setPositionY] = useState();
+  const [startBuilding, setStartBuilding] = useState("");
+  const [endBuilding, setEndBuilding] = useState("");
+
+  const getBuildingNameStart = () => {
+    axios
+      .get(`http://172.30.1.7:8080/items/subject?subject=${startSubject}`)
+      .then((res) => {
+        setStartBuilding(res.data.building);
+        // setPositionX(res.data.pos_x);
+        // setPositionY(res.data.pos_y);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getBuildingNameEnd = () => {
+    axios
+      .get(`http://172.30.1.7:8080/items/subject?subject=${endSubject}`)
+      .then((res) => {
+        setEndBuilding(res.data.building);
+        // setPositionX(res.data.pos_x);
+        // setPositionY(res.data.pos_y);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const onChangeStart = (e: any) => {
+    const { value } = e.target;
+    setStartSubject(value);
+    getBuildingNameStart();
+  };
+  const onChangeEnd = (e: any) => {
+    const { value } = e.target;
+    setEndSubject(value);
+    getBuildingNameEnd();
+  };
+  const onKeyPressStart = () => {
+    //서버한테 요청해서 좌표 받음.
+    getBuildingNameStart();
+  };
+
+  const onKeyPressEnd = () => {
+    //서버한테 요청해서 좌표 받음.
+    getBuildingNameEnd();
+  };
+
+  const onClick = () => {
+    //건물 명 두 개 받아서 url 이동
+    window.open(
+      `https://map.kakao.com/?sName=${startBuilding}&eName=${endBuilding}`,
+      "_blank"
+    );
+  };
   return (
     <HomeArea>
       <SideBar>
         <StLogo>YON MAP</StLogo>
         <StSearchContainer>
-          <StBeforeClassInput placeholder="앞 강의 입력"></StBeforeClassInput>
-          <StAfterClassInput placeholder="뒷 강의 입력"></StAfterClassInput>
+          <StBeforeClassInput
+            placeholder="앞 강의 입력"
+            name="subject"
+            type="text"
+            onChange={onChangeStart}
+            onKeyPress={onKeyPressStart}
+          ></StBeforeClassInput>
+          <StAfterClassInput
+            placeholder="뒷 강의 입력"
+            name="subject"
+            type="text"
+            onChange={onChangeEnd}
+            onKeyPress={onKeyPressEnd}
+          ></StAfterClassInput>
         </StSearchContainer>
         <StSearchButton>
-          <button>길찾기</button>
+          <button onClick={onClick}>길찾기</button>
         </StSearchButton>
       </SideBar>
       <Map />
